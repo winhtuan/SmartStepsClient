@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, ActivityIndicator, View } from 'react-native';
 import { colors } from '../../theme/colors';
 import { spacing } from '../../theme/spacing';
 import { typography } from '../../theme/typography';
@@ -13,6 +13,8 @@ const Button = ({
   loading = false,
   style,
   textStyle,
+  leftIcon,
+  rightIcon,
   ...rest
 }) => {
   const isPrimary = variant === 'primary';
@@ -76,9 +78,13 @@ const Button = ({
           size="small" 
         />
       ) : (
-        <Text style={[styles.text, getTextStyle(), textStyle]}>
-          {title}
-        </Text>
+        <>
+          {leftIcon && <View style={styles.leftIcon}>{leftIcon}</View>}
+          <Text style={[styles.text, getTextStyle(), textStyle]}>
+            {title}
+          </Text>
+          {rightIcon && <View style={styles.rightIcon}>{rightIcon}</View>}
+        </>
       )}
     </TouchableOpacity>
   );
@@ -105,30 +111,37 @@ const styles = StyleSheet.create({
     paddingVertical: 0,
   },
   sizeSm: {
-    paddingVertical: spacing.xs,
-    paddingHorizontal: spacing.sm,
-  },
-  sizeMd: {
-    paddingVertical: 12, // approx 44px height min for touch targets
+    paddingVertical: spacing.sm,
     paddingHorizontal: spacing.md,
   },
+  sizeMd: {
+    height: 80, // h-20
+    paddingHorizontal: spacing.xl,
+    borderRadius: 16, // rounded-xl
+  },
   sizeLg: {
-    paddingVertical: spacing.md,
-    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.lg,
+    paddingHorizontal: spacing.xxl,
   },
   text: {
-    fontSize: typography.sizes.md,
-    fontWeight: typography.weights.bold,
+    fontSize: typography.sizes.xxl, // text-2xl
+    fontWeight: typography.weights.extrabold,
     textAlign: 'center',
   },
   textPrimary: {
-    color: colors.white,
+    color: colors.text, // text-slate-900 per Figma
   },
   textOutline: {
     color: colors.primary,
   },
   disabled: {
     opacity: 0.5,
+  },
+  leftIcon: {
+    marginRight: spacing.sm,
+  },
+  rightIcon: {
+    marginLeft: spacing.sm,
   },
 });
 

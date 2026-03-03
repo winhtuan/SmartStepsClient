@@ -5,17 +5,19 @@ import {
   Text, 
   KeyboardAvoidingView, 
   Platform, 
-  SafeAreaView,
   ScrollView,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLogin } from '../hooks/useLogin';
 import LoginForm from '../components/LoginForm';
 import Button from '../../../components/ui/Button';
 import { colors } from '../../../theme/colors';
 import { spacing } from '../../../theme/spacing';
 import { typography } from '../../../theme/typography';
+import { TouchableOpacity, Image } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-const LoginScreen = ({ navigation }) => {
+const LoginScreenView = ({ navigation }) => {
   const {
     email,
     setEmail,
@@ -47,40 +49,35 @@ const LoginScreen = ({ navigation }) => {
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
         >
-          <View style={styles.headerContainer}>
-            <Text style={styles.title}>Smart Steps</Text>
-            <Text style={styles.subtitle}>Welcome back!</Text>
-            <Text style={styles.description}>Let's get moving together</Text>
-          </View>
+          <View style={styles.mainContainer}>
+            {/* Logo Section */}
+            <View style={styles.logoContainer}>
+              <View style={styles.logoWrapper}>
+                <Image source={require('../../../assets/images/logo smartstep-01.png')} style={styles.logo} />
+              </View>
+              <Text style={styles.title}>Welcome!</Text>
+              <Text style={styles.subtitle}>Safe, smart, and confident every day</Text>
+            </View>
 
-          <LoginForm
-            email={email}
-            setEmail={setEmail}
-            password={password}
-            setPassword={setPassword}
-            errors={errors}
-            isLoading={isLoading}
-            onSubmit={handleLogin}
-          />
-
-          <View style={styles.footerContainer}>
-            <Button
-              title="Forgot Password?"
-              variant="text"
-              onPress={handleForgotPassword}
-              style={styles.footerButton}
-              textStyle={styles.footerButtonText}
-            />
-
-            <View style={styles.signUpContainer}>
-              <Text style={styles.signUpPrompt}>New to Smart Steps?</Text>
-              <Button
-                title="Create an account"
-                variant="text"
-                onPress={handleSignUp}
-                style={styles.signUpButton}
-                textStyle={styles.signUpButtonText}
+            {/* Form Section */}
+            <View style={styles.formSection}>
+              <LoginForm
+                email={email}
+                setEmail={setEmail}
+                password={password}
+                setPassword={setPassword}
+                errors={errors}
+                isLoading={isLoading}
+                onSubmit={handleLogin}
+                onForgotPassword={handleForgotPassword}
               />
+
+              <View style={styles.footerContainer}>
+                <Text style={styles.signUpPrompt}>New to Smart Steps?</Text>
+                <TouchableOpacity onPress={handleSignUp}>
+                  <Text style={styles.signUpButtonText}>Create Account</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </ScrollView>
@@ -99,55 +96,78 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    padding: spacing.lg,
-    justifyContent: 'center',
   },
-  headerContainer: {
+  mainContainer: {
+    flex: 1,
+    paddingHorizontal: spacing.lg,
+    paddingTop: 20,
+    paddingBottom: 30, // User requested 30px exactly
+    justifyContent: 'space-between',
+  },
+  logoContainer: {
     alignItems: 'center',
-    marginBottom: spacing.xxl,
+    justifyContent: 'center',
+    paddingVertical: spacing.xl,
+  },
+  logoWrapper: {
+    width: 180, 
+    height: 180,
+    borderRadius: 90, 
+    borderWidth: 4,
+    borderColor: colors.primary,
+    backgroundColor: colors.white,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: spacing.lg,
+    overflow: 'hidden',
+  },
+  logoPlaceholderText: {
+    color: colors.textPlaceholder,
+    fontWeight: typography.weights.bold,
+  },
+  logo: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'contain',
   },
   title: {
-    fontSize: typography.sizes.xxl,
-    fontWeight: typography.weights.bold,
-    color: colors.primary,
-    marginBottom: spacing.md,
-  },
-  subtitle: {
-    fontSize: typography.sizes.xl,
-    fontWeight: typography.weights.bold,
+    fontSize: typography.sizes.xxxl, // text-4xl
+    fontWeight: typography.weights.extrabold,
     color: colors.text,
-    marginBottom: spacing.xs,
-  },
-  description: {
-    fontSize: typography.sizes.md,
-    color: colors.textSecondary,
     textAlign: 'center',
   },
-  footerContainer: {
-    marginTop: spacing.xl,
-    alignItems: 'center',
-  },
-  footerButton: {
-    marginBottom: spacing.lg,
-  },
-  footerButtonText: {
+  subtitle: {
+    fontSize: typography.sizes.lg, // text-lg
     fontWeight: typography.weights.medium,
+    color: colors.textSecondary,
+    textAlign: 'center',
+    marginTop: spacing.sm,
   },
-  signUpContainer: {
+  formSection: {
+    width: '100%',
+    maxWidth: 500, // max-w-md approx
+    alignSelf: 'center',
+    marginTop: spacing.md,
+  },
+  footerContainer: {
     flexDirection: 'row',
+    justifyContent: 'center',
     alignItems: 'center',
+    paddingTop: spacing.lg,
+    paddingBottom: spacing.md,
   },
   signUpPrompt: {
     color: colors.textSecondary,
-    fontSize: typography.sizes.sm,
-  },
-  signUpButton: {
-    marginLeft: spacing.xs,
+    fontSize: typography.sizes.lg,
+    fontWeight: typography.weights.medium,
   },
   signUpButtonText: {
-    fontSize: typography.sizes.sm,
+    color: colors.primary,
+    fontSize: typography.sizes.lg,
     fontWeight: typography.weights.bold,
+    marginLeft: spacing.xs,
+    textDecorationLine: 'underline',
   },
 });
 
-export default LoginScreen;
+export default LoginScreenView;

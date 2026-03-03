@@ -45,11 +45,25 @@ export const useLogin = () => {
     }
   }, [email, password, validate]);
 
+  const handleSetEmail = useCallback((val) => {
+    setEmail(val);
+    if (errors.email) {
+      setErrors((prev) => ({ ...prev, email: null }));
+    }
+  }, [errors.email]);
+
+  const handleSetPassword = useCallback((val) => {
+    setPassword(val);
+    if (errors.password) {
+      setErrors((prev) => ({ ...prev, password: null }));
+    }
+  }, [errors.password]);
+
   return {
     email,
-    setEmail,
+    setEmail: handleSetEmail,
     password,
-    setPassword,
+    setPassword: handleSetPassword,
     errors,
     isLoading,
     handleLogin,

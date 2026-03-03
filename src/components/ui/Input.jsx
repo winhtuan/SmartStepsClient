@@ -11,23 +11,40 @@ const Input = React.forwardRef(({
   hasError,
   style,
   inputStyle,
+  inputContainerStyle,
+  leftIcon,
+  rightIcon,
   ...rest
 }, ref) => {
   return (
     <View style={[styles.container, style]}>
-      <TextInput
-        ref={ref}
-        value={value}
-        onChangeText={onChangeText}
-        placeholder={placeholder}
-        placeholderTextColor={colors.textSecondary}
-        style={[
-          styles.input,
-          hasError && styles.inputError,
-          inputStyle,
-        ]}
-        {...rest}
-      />
+      <View style={[styles.inputContainer, inputContainerStyle]}>
+        {leftIcon && (
+          <View style={styles.leftIconContainer}>
+            {leftIcon}
+          </View>
+        )}
+        <TextInput
+          ref={ref}
+          value={value}
+          onChangeText={onChangeText}
+          placeholder={placeholder}
+          placeholderTextColor={colors.textPlaceholder}
+          style={[
+            styles.input,
+            hasError && styles.inputError,
+            leftIcon && styles.inputWithLeftIcon,
+            rightIcon && styles.inputWithRightIcon,
+            inputStyle,
+          ]}
+          {...rest}
+        />
+        {rightIcon && (
+          <View style={styles.rightIconContainer}>
+            {rightIcon}
+          </View>
+        )}
+      </View>
     </View>
   );
 });
@@ -38,18 +55,38 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
   },
+  inputContainer: {
+    position: 'relative',
+    justifyContent: 'center',
+  },
   input: {
     backgroundColor: colors.surface,
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: colors.border,
-    borderRadius: spacing.sm,
+    borderRadius: spacing.xl, // rounded-xl
+    height: spacing.xxxl,     // h-16
     paddingHorizontal: spacing.md,
-    paddingVertical: 12,
-    fontSize: typography.sizes.md,
+    fontSize: typography.sizes.xl, // text-xl
     color: colors.text,
+  },
+  inputWithLeftIcon: {
+    paddingLeft: spacing.xxl + spacing.sm, // pl-14
+  },
+  inputWithRightIcon: {
+    paddingRight: spacing.xxl + spacing.sm, // pr-14
   },
   inputError: {
     borderColor: colors.error,
+  },
+  leftIconContainer: {
+    position: 'absolute',
+    left: spacing.md,
+    zIndex: 1,
+  },
+  rightIconContainer: {
+    position: 'absolute',
+    right: spacing.md,
+    zIndex: 1,
   },
 });
 
