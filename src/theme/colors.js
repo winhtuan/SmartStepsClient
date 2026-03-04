@@ -10,6 +10,7 @@ export const colors = {
   textPlaceholder: '#94a3b8', // slate-400
   error: '#EF4444',
   border: 'rgba(255, 183, 0, 0.2)', // primary/20
+  borderInput: '#e2e8f0', // slate-200, visible default border for inputs
   borderFocus: '#ffb700',
   white: '#FFFFFF',
   black: '#000000',

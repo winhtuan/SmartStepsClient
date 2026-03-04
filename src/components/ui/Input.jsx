@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
 import { colors } from '../../theme/colors';
 import { spacing } from '../../theme/spacing';
@@ -14,8 +14,22 @@ const Input = React.forwardRef(({
   inputContainerStyle,
   leftIcon,
   rightIcon,
+  onFocus,
+  onBlur,
   ...rest
 }, ref) => {
+  const [isFocused, setIsFocused] = useState(false);
+
+  const handleFocus = (e) => {
+    setIsFocused(true);
+    onFocus?.(e);
+  };
+
+  const handleBlur = (e) => {
+    setIsFocused(false);
+    onBlur?.(e);
+  };
+
   return (
     <View style={[styles.container, style]}>
       <View style={[styles.inputContainer, inputContainerStyle]}>
@@ -30,8 +44,11 @@ const Input = React.forwardRef(({
           onChangeText={onChangeText}
           placeholder={placeholder}
           placeholderTextColor={colors.textPlaceholder}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
           style={[
             styles.input,
+            isFocused && styles.inputFocused,
             hasError && styles.inputError,
             leftIcon && styles.inputWithLeftIcon,
             rightIcon && styles.inputWithRightIcon,
@@ -62,12 +79,15 @@ const styles = StyleSheet.create({
   input: {
     backgroundColor: colors.surface,
     borderWidth: 2,
-    borderColor: colors.border,
-    borderRadius: spacing.xl, // rounded-xl
-    height: spacing.xxxl,     // h-16
+    borderColor: colors.borderInput,
+    borderRadius: spacing.xl,
+    height: spacing.xxxl,
     paddingHorizontal: spacing.md,
-    fontSize: typography.sizes.xl, // text-xl
+    fontSize: typography.sizes.md, // 16px
     color: colors.text,
+  },
+  inputFocused: {
+    borderColor: colors.borderFocus,
   },
   inputWithLeftIcon: {
     paddingLeft: spacing.xxl + spacing.sm, // pl-14

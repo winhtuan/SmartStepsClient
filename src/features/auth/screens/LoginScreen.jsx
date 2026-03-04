@@ -15,12 +15,10 @@ import { colors } from '../../../theme/colors';
 import { spacing } from '../../../theme/spacing';
 import { typography } from '../../../theme/typography';
 import { TouchableOpacity, Image } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
-
 const LoginScreenView = ({ navigation }) => {
   const {
-    email,
-    setEmail,
+    phoneNumber,
+    setPhoneNumber,
     password,
     setPassword,
     errors,
@@ -55,15 +53,15 @@ const LoginScreenView = ({ navigation }) => {
               <View style={styles.logoWrapper}>
                 <Image source={require('../../../assets/images/logo smartstep-01.png')} style={styles.logo} />
               </View>
-              <Text style={styles.title}>Welcome!</Text>
-              <Text style={styles.subtitle}>Safe, smart, and confident every day</Text>
+              <Text style={styles.title}>Chào mừng!</Text>
+              <Text style={styles.subtitle}>An toàn, thông minh và tự tin mỗi ngày</Text>
             </View>
 
             {/* Form Section */}
             <View style={styles.formSection}>
               <LoginForm
-                email={email}
-                setEmail={setEmail}
+                phoneNumber={phoneNumber}
+                setPhoneNumber={setPhoneNumber}
                 password={password}
                 setPassword={setPassword}
                 errors={errors}
@@ -72,10 +70,26 @@ const LoginScreenView = ({ navigation }) => {
                 onForgotPassword={handleForgotPassword}
               />
 
+              <View style={styles.dividerContainer}>
+                <View style={styles.dividerLine} />
+                <Text style={styles.dividerText}>Hoặc đăng nhập bằng</Text>
+                <View style={styles.dividerLine} />
+              </View>
+
+              <View style={styles.socialContainer}>
+                <TouchableOpacity style={styles.socialButton} accessibilityLabel="Đăng nhập bằng Facebook">
+                  <Image source={require('../../../assets/icons/facebook_logo_icon_147291.png')} style={styles.socialIcon} />
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.socialButton} accessibilityLabel="Đăng nhập bằng Google">
+                  <Image source={require('../../../assets/icons/googlechrome_103832.png')} style={styles.socialIcon} />
+                </TouchableOpacity>
+              </View>
+
               <View style={styles.footerContainer}>
-                <Text style={styles.signUpPrompt}>New to Smart Steps?</Text>
-                <TouchableOpacity onPress={handleSignUp}>
-                  <Text style={styles.signUpButtonText}>Create Account</Text>
+                <Text style={styles.signUpPrompt}>Chưa có tài khoản?</Text>
+                <TouchableOpacity onPress={handleSignUp} style={styles.signUpButton} activeOpacity={0.7}>
+                  <Text style={styles.signUpButtonText}>Đăng ký ngay</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -100,25 +114,26 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     paddingHorizontal: spacing.lg,
-    paddingTop: 20,
-    paddingBottom: 30, // User requested 30px exactly
+    paddingTop: spacing.xs,
+    paddingBottom: 30,
     justifyContent: 'space-between',
   },
   logoContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: spacing.xl,
+    paddingTop: spacing.xs,
+    paddingBottom: spacing.md,
   },
   logoWrapper: {
-    width: 180, 
-    height: 180,
-    borderRadius: 90, 
+    width: 130,
+    height: 130,
+    borderRadius: 65,
     borderWidth: 4,
     borderColor: colors.primary,
     backgroundColor: colors.white,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: spacing.lg,
+    marginBottom: spacing.md,
     overflow: 'hidden',
   },
   logoPlaceholderText: {
@@ -131,23 +146,65 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   title: {
-    fontSize: typography.sizes.xxxl, // text-4xl
+    fontSize: 28,
     fontWeight: typography.weights.extrabold,
     color: colors.text,
     textAlign: 'center',
   },
   subtitle: {
-    fontSize: typography.sizes.lg, // text-lg
-    fontWeight: typography.weights.medium,
+    fontSize: typography.sizes.sm,
+    fontWeight: typography.weights.regular,
     color: colors.textSecondary,
     textAlign: 'center',
-    marginTop: spacing.sm,
+    marginTop: spacing.xs,
   },
   formSection: {
     width: '100%',
     maxWidth: 500, // max-w-md approx
     alignSelf: 'center',
     marginTop: spacing.md,
+  },
+  dividerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: spacing.lg,
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: colors.border,
+  },
+  dividerText: {
+    marginHorizontal: spacing.sm,
+    color: colors.textSecondary,
+    fontSize: typography.sizes.sm,
+    fontWeight: typography.weights.medium,
+  },
+  socialContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: spacing.xl,
+    marginBottom: spacing.md,
+  },
+  socialIcon: {
+    width: 32,
+    height: 32,
+    resizeMode: 'contain',
+  },
+  socialButton: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    backgroundColor: colors.white,
+    borderColor: colors.border,
+    shadowColor: colors.black,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.12,
+    shadowRadius: 6,
+    elevation: 4,
   },
   footerContainer: {
     flexDirection: 'row',
@@ -158,15 +215,21 @@ const styles = StyleSheet.create({
   },
   signUpPrompt: {
     color: colors.textSecondary,
-    fontSize: typography.sizes.lg,
-    fontWeight: typography.weights.medium,
+    fontSize: typography.sizes.sm,
+    fontWeight: typography.weights.regular,
+  },
+  signUpButton: {
+    borderWidth: 1,
+    borderColor: colors.primary,
+    borderRadius: spacing.sm,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
+    marginLeft: spacing.sm,
   },
   signUpButtonText: {
     color: colors.primary,
-    fontSize: typography.sizes.lg,
+    fontSize: typography.sizes.sm,
     fontWeight: typography.weights.bold,
-    marginLeft: spacing.xs,
-    textDecorationLine: 'underline',
   },
 });
 

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { StyleSheet, View, Text, TouchableOpacity, Keyboard } from 'react-native';
 import Field from '../../../components/ui/Field';
 import Button from '../../../components/ui/Button';
 import ErrorText from '../../../components/ui/ErrorText';
@@ -9,8 +9,8 @@ import { colors } from '../../../theme/colors';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const LoginForm = ({
-  email,
-  setEmail,
+  phoneNumber,
+  setPhoneNumber,
   password,
   setPassword,
   errors,
@@ -19,55 +19,88 @@ const LoginForm = ({
   onForgotPassword,
 }) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const passwordRef = useRef(null);
+
+  const handlePhoneSubmit = () => {
+    passwordRef.current?.focus();
+  };
+
+  const handlePasswordSubmit = () => {
+    Keyboard.dismiss();
+    onSubmit();
+  };
 
   return (
     <View style={styles.container}>
-      {errors.general && (
-        <ErrorText error={errors.general} style={styles.generalError} />
-      )}
-      
-      <Field
-        label="Email Address"
-        placeholder="name@email.com"
-        value={email}
-        onChangeText={setEmail}
-        error={errors.email}
-        keyboardType="email-address"
-        autoCapitalize="none"
-        autoComplete="email"
-        leftIcon={<Icon name="envelope-o" size={24} color={colors.textSecondary} />}
-        labelStyle={styles.fieldLabel}
-      />
-      
-      <Field
-        label="Password"
-        placeholder="Your password"
-        value={password}
-        onChangeText={setPassword}
-        error={errors.password}
-        secureTextEntry={!isPasswordVisible}
-        autoComplete="password"
-        leftIcon={<Icon name="lock" size={24} color={colors.textSecondary} />}
-        rightIcon={
-          <TouchableOpacity onPress={() => setIsPasswordVisible(!isPasswordVisible)} activeOpacity={0.7}>
-            <Icon name={isPasswordVisible ? 'eye-slash' : 'eye'} size={24} color={colors.textSecondary} />
-          </TouchableOpacity>
-        }
-        labelStyle={styles.fieldLabel}
-      />
-      
-      <View style={styles.forgotPasswordContainer}>
-        <TouchableOpacity onPress={onForgotPassword}>
-          <Text style={styles.forgotPasswordText}>Forgot password?</Text>
-        </TouchableOpacity>
+      <View style={styles.headerContainer}>
+        {errors.general && (
+          <ErrorText error={errors.general} style={styles.generalError} />
+        )}
       </View>
+      
+      <View style={styles.inputGroup}>
+        <Field
+          label="Số điện thoại"
+          placeholder="Nhập số điện thoại của bạn"
+          value={phoneNumber}
+          onChangeText={setPhoneNumber}
+          error={errors.phoneNumber}
+          keyboardType="phone-pad"
+          autoCapitalize="none"
+          autoComplete="tel"
+          returnKeyType="next"
+          onSubmitEditing={handlePhoneSubmit}
+          blurOnSubmit={false}
+          leftIcon={<Icon name="phone" size={24} color={colors.textSecondary} />}
+          labelStyle={styles.fieldLabel}
+          containerStyle={styles.fieldContainer}
+        />
+        
+        <Field
+          ref={passwordRef}
+          label="Mật khẩu"
+          placeholder="Nhập mật khẩu của bạn"
+          value={password}
+          onChangeText={setPassword}
+          error={errors.password}
+          secureTextEntry={!isPasswordVisible}
+          autoComplete="password"
+          returnKeyType="done"
+          onSubmitEditing={handlePasswordSubmit}
+          leftIcon={<Icon name="lock" size={24} color={colors.textSecondary} />}
+          rightIcon={
+            <TouchableOpacity
+              onPress={() => setIsPasswordVisible(!isPasswordVisible)}
+              activeOpacity={0.7}
+              style={styles.eyeButton}
+              accessibilityLabel={isPasswordVisible ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
+            >
+              <Icon
+                name={isPasswordVisible ? 'eye-slash' : 'eye'}
+                size={20}
+                color={isPasswordVisible ? colors.primary : colors.textSecondary}
+              />
+            </TouchableOpacity>
+          }
+          labelStyle={styles.fieldLabel}
+          containerStyle={styles.fieldContainer}
+        />
+      </View>
+      
+      <View style={styles.actionGroup}>
+        <View style={styles.forgotPasswordContainer}>
+          <TouchableOpacity onPress={onForgotPassword} activeOpacity={0.7} hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
+            <Text style={styles.forgotPasswordText}>Quên mật khẩu?</Text>
+          </TouchableOpacity>
+        </View>
 
-      <Button
-        title="Sign In"
-        onPress={onSubmit}
-        loading={isLoading}
-        style={styles.button}
-      />
+        <Button
+          title="Đăng nhập"
+          onPress={handlePasswordSubmit}
+          loading={isLoading}
+          style={styles.button}
+        />
+      </View>
     </View>
   );
 };
@@ -77,17 +110,32 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingBottom: spacing.lg,
   },
+  headerContainer: {
+    minHeight: 24,
+    marginBottom: spacing.xs,
+  },
   generalError: {
-    marginBottom: spacing.md,
     textAlign: 'center',
   },
+  inputGroup: {
+    marginBottom: spacing.sm,
+  },
+  fieldContainer: {
+    marginBottom: spacing.md,
+  },
+  actionGroup: {
+    marginTop: spacing.xs,
+  },
   button: {
-    marginTop: spacing.md,
+    marginTop: spacing.sm,
+    height: 56,
+    borderRadius: 12,
   },
   fieldLabel: {
-    fontSize: typography.sizes.xl,
-    fontWeight: typography.weights.bold,
+    fontSize: typography.sizes.md,
+    fontWeight: typography.weights.medium,
     paddingHorizontal: spacing.xs,
+    marginBottom: spacing.xs,
   },
   iconPlaceholder: {
     fontSize: typography.sizes.xxl,
@@ -99,15 +147,20 @@ const styles = StyleSheet.create({
   forgotPasswordContainer: {
     alignItems: 'flex-end',
     width: '100%',
-    marginTop: -spacing.sm,
-    marginBottom: spacing.lg,
+    marginBottom: spacing.md,
   },
   forgotPasswordText: {
     color: colors.primary,
-    fontSize: typography.sizes.lg,
-    fontWeight: typography.weights.bold,
+    fontSize: typography.sizes.sm,
+    fontWeight: typography.weights.medium,
     textDecorationLine: 'underline',
-  }
+  },
+  eyeButton: {
+    width: 44,
+    height: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });
 
 export default React.memo(LoginForm);

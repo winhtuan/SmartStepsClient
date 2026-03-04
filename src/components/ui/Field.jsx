@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   label: {
-    fontSize: typography.sizes.sm,
+    fontSize: typography.sizes.lg,
     fontWeight: typography.weights.medium,
     color: colors.text,
     marginBottom: spacing.xs,
