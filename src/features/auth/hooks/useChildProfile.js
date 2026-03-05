@@ -1,10 +1,18 @@
 import { useState, useCallback } from 'react';
 
 const AVATAR_OPTIONS = [
-  { id: 'rabbit', label: 'Thỏ', emoji: '🐰' },
-  { id: 'bear', label: 'Gấu', emoji: '🐻' },
-  { id: 'cat', label: 'Mèo', emoji: '🐱' },
-  { id: 'dinosaur', label: 'Khủng long', emoji: '🦕' },
+  { id: 'hippopotamus', label: 'Hà mã', image: require('../../../assets/images/Hippopotamus.png') },
+  { id: 'elephant', label: 'Voi', image: require('../../../assets/images/Elepant.png') },
+  { id: 'cow', label: 'Bò', image: require('../../../assets/images/Cow.png') },
+  { id: 'rabbit', label: 'Thỏ', image: require('../../../assets/images/Rabbit.png') },
+  { id: 'lion', label: 'Sư tử', image: require('../../../assets/images/Lion.png') },
+  { id: 'fox', label: 'Cáo', image: require('../../../assets/images/Fox.png') },
+  { id: 'monkey', label: 'Khỉ', image: require('../../../assets/images/Monkey.png') },
+  { id: 'koala', label: 'Koala', image: require('../../../assets/images/Koala.png') },
+  { id: 'husky', label: 'Chó Husky', image: require('../../../assets/images/Husky.png') },
+  { id: 'pig', label: 'Heo', image: require('../../../assets/images/Pig.png') },
+  { id: 'bird', label: 'Chim', image: require('../../../assets/images/Bird.png') },
+  { id: 'walrus', label: 'Hải mã', image: require('../../../assets/images/Walrus.png') },
 ];
 
 const GENDER_OPTIONS = [

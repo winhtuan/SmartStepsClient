@@ -3,6 +3,7 @@ import {
   StyleSheet,
   View,
   Text,
+  Image,
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
@@ -70,11 +71,22 @@ const ChildProfileScreen = ({ navigation }) => {
           {/* Playful header */}
           <View style={styles.header}>
             <View style={styles.illustrationWrapper}>
-              <Text style={styles.illustrationEmoji}>
-                {selectedAvatar
-                  ? avatarOptions.find((a) => a.id === selectedAvatar)?.emoji
-                  : '👶'}
-              </Text>
+              {(() => {
+                const active = selectedAvatar
+                  ? avatarOptions.find((a) => a.id === selectedAvatar)
+                  : null;
+                if (!active || active.image) {
+                  return (
+                    <Image
+                      source={active?.image ?? require('../../../assets/images/baby-1.png')}
+                      style={styles.illustrationImage}
+                    />
+                  );
+                }
+                return (
+                  <Text style={styles.illustrationEmoji}>{active.emoji}</Text>
+                );
+              })()}
             </View>
             <Text style={styles.title}>Hồ sơ của bé</Text>
             <Text style={styles.subtitle}>
@@ -155,6 +167,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 10,
     elevation: 5,
+  },
+  illustrationImage: {
+    width: 64,
+    height: 64,
+    resizeMode: 'contain',
   },
   illustrationEmoji: {
     fontSize: 48,

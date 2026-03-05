@@ -1,8 +1,9 @@
-import React, { useRef, useCallback } from 'react';
+import React, { useRef, useCallback, useState } from 'react';
 import {
   StyleSheet,
   View,
   Text,
+  Image,
   TouchableOpacity,
   Animated,
 } from 'react-native';
@@ -15,11 +16,21 @@ import { spacing } from '../../../theme/spacing';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const AVATAR_PALETTE = {
-  bear: { bg: '#FFF8E1', selectedBg: '#FFECB3', border: '#FFD54F' },
-  cat: { bg: '#F3E5F5', selectedBg: '#E1BEE7', border: '#CE93D8' },
-  dinosaur: { bg: '#E8F5E9', selectedBg: '#C8E6C9', border: '#81C784' },
   rabbit: { bg: '#E3F2FD', selectedBg: '#BBDEFB', border: '#90CAF9' },
+  lion: { bg: '#FFF3E0', selectedBg: '#FFE0B2', border: '#FFB74D' },
+  fox: { bg: '#FBE9E7', selectedBg: '#FFCCBC', border: '#FF8A65' },
+  monkey: { bg: '#FFF8E1', selectedBg: '#FFECB3', border: '#FFD54F' },
+  koala: { bg: '#F1F8E9', selectedBg: '#DCEDC8', border: '#AED581' },
+  husky: { bg: '#E8EAF6', selectedBg: '#C5CAE9', border: '#7986CB' },
+  pig: { bg: '#FCE4EC', selectedBg: '#F8BBD0', border: '#F48FB1' },
+  bird: { bg: '#E0F7FA', selectedBg: '#B2EBF2', border: '#4DD0E1' },
+  cow: { bg: '#F3E5F5', selectedBg: '#E1BEE7', border: '#CE93D8' },
+  elephant: { bg: '#EDE7F6', selectedBg: '#D1C4E9', border: '#9575CD' },
+  hippopotamus: { bg: '#E8F5E9', selectedBg: '#C8E6C9', border: '#81C784' },
+  walrus: { bg: '#F5F5F5', selectedBg: '#E0E0E0', border: '#9E9E9E' },
 };
+
+const INITIAL_AVATAR_COUNT = 4;
 
 const H_INPUT = 56;
 const H_GENDER_OPTION = 44;
@@ -41,6 +52,7 @@ const ChildProfileForm = ({
   onAvatarSelect,
   onSubmit,
 }) => {
+  const [showAllAvatars, setShowAllAvatars] = useState(false);
   const scaleAnims = useRef({});
 
   const getScaleAnim = useCallback((id) => {
@@ -132,7 +144,11 @@ const ChildProfileForm = ({
             accessibilityRole="radio"
             accessibilityState={{ selected: isSelected }}
           >
-            <Text style={styles.avatarEmoji}>{option.emoji}</Text>
+            {option.image ? (
+              <Image source={option.image} style={styles.avatarImage} />
+            ) : (
+              <Text style={styles.avatarEmoji}>{option.emoji}</Text>
+            )}
             <Text
               style={[
                 styles.avatarLabel,
@@ -203,8 +219,22 @@ const ChildProfileForm = ({
         </Text>
 
         <View style={styles.avatarGrid}>
-          {avatarOptions.map(renderAvatarCard)}
+          {(showAllAvatars ? avatarOptions : avatarOptions.slice(0, INITIAL_AVATAR_COUNT)).map(renderAvatarCard)}
         </View>
+
+        {avatarOptions.length > INITIAL_AVATAR_COUNT && (
+          <TouchableOpacity
+            onPress={() => setShowAllAvatars(prev => !prev)}
+            activeOpacity={0.7}
+            style={styles.showMoreButton}
+            accessibilityRole="button"
+            accessibilityLabel={showAllAvatars ? 'Ẩn bớt avatar' : 'Xem thêm avatar'}
+          >
+            <Text style={styles.showMoreText}>
+              {showAllAvatars ? 'Ẩn bớt ▲' : 'Xem thêm avatar ▼'}
+            </Text>
+          </TouchableOpacity>
+        )}
       </View>
 
       {/* Button */}
@@ -302,6 +332,12 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
 
+  avatarImage: {
+    width: 42,
+    height: 42,
+    resizeMode: 'contain',
+  },
+
   avatarEmoji: {
     fontSize: 34,
   },
@@ -315,6 +351,19 @@ const styles = StyleSheet.create({
   avatarLabelSelected: {
     fontWeight: '700',
     color: colors.text,
+  },
+
+  showMoreButton: {
+    alignSelf: 'center',
+    marginTop: spacing.sm,
+    paddingVertical: spacing.xs,
+    paddingHorizontal: spacing.md,
+  },
+
+  showMoreText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: colors.primary,
   },
 
   button: {
