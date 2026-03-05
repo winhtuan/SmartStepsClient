@@ -64,9 +64,9 @@ const RegisterScreen = ({ navigation }) => {
         >
           <View style={styles.mainContainer}>
             <View style={styles.headingContainer}>
-              <Text style={styles.headingTitle}>Tạo tài khoản</Text>
+              <Text style={styles.headingTitle}>Bắt đầu hành trình khám phá</Text>
               <Text style={styles.headingSubtitle}>
-                Bắt đầu hành trình sống khỏe ngay hôm nay!
+                Học kỹ năng sống qua những tình huống thực tế mỗi ngày!
               </Text>
             </View>
 
