@@ -32,8 +32,7 @@ const LoginScreenView = ({ navigation }) => {
   };
 
   const handleSignUp = () => {
-    console.log('Navigate to Sign Up');
-    // navigation.navigate('SignUp');
+    navigation.navigate('Register');
   };
 
   return (
